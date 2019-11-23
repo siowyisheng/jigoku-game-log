@@ -21,23 +21,28 @@ var copyToClipboard = str => {
   }
 };
 
+// get all game messages in a HTMLCollection, concat them, then split them
 var messages = document.getElementsByClassName("message");
+console.log(messages);
 var log = "";
 for (i = 0; i < messages.length; i++) {
   log += messages[i].textContent + "\n";
 }
-
 var lines = log.split("\n");
+
+// initialize variables that will be used
 var finalLog = "";
 var line = "";
+var currentLine = 0;
+var markerLine = 0;
+
+// convenience functions for use 
 var addToLog = s => {
   finalLog += s + "\n";
 };
 var addLineBreak = () => {
   finalLog += "\n";
 };
-var currentLine = 0;
-var markerLine = 0;
 var findNext = s => {
   for (i = currentLine + 1; i < lines.length; i++) {
     if (lines[i].includes(s)) {
@@ -54,7 +59,6 @@ var shortFromLine = n => {
     .substring(0, 2)
     .toUpperCase();
 };
-
 var listPlayedAndUsed = () => {
   var p1Played = [];
   var p2Played = [];
@@ -109,6 +113,7 @@ var listPlayedAndUsed = () => {
   }
 };
 
+// start logging stuff
 var dynastyLine = findNext("turn: 1 - dynasty phase")[0];
 var p1Fullname = lines[dynastyLine + 1].split(" ")[0];
 var p2Fullname = lines[dynastyLine + 2].split(" ")[0];

@@ -1,7 +1,8 @@
 {
   "name": "Jigoku Game Log",
+  "short_name": "Jigoku Game Log",
   "version": "0.1",
-  "description": "Logs a jigoku game for review.",
+  "description": "Summarises a jigoku game for sharing and review and copies it to your clipboard.",
   "permissions": ["activeTab", "declarativeContent"],
   "background": {
     "scripts": ["background.js"],
