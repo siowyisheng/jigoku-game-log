@@ -56,6 +56,23 @@ for (var message of messages) {
   }
 }
 
+var dumpCardMessages = () => {
+  if (!!cardsPlayed[p1]) {
+    log += `${shorten(p1)} played ${cardsPlayed[p1].join(', ')}\n`
+  }
+  if (!!cardsPlayed[p2]) {
+    log += `${shorten(p2)} played ${cardsPlayed[p2].join(', ')}\n`
+  }
+  cardsPlayed = {}
+  if (!!cardsUsed[p1]) {
+    log += `${shorten(p1)} used ${cardsUsed[p1].join(', ')}\n`
+  }
+  if (!!cardsUsed[p2]) {
+    log += `${shorten(p2)} used ${cardsUsed[p2].join(', ')}\n`
+  }
+  cardsUsed = {}
+}
+
 for (var message of messages) {
   var s = message.textContent
   var dynastyFlop = /^(.*) reveals (.*)/
@@ -75,20 +92,7 @@ for (var message of messages) {
   if (!!dynastyPhase.test(s)) {
     var m = dynastyPhase.exec(s)
     if (m[1] > 1) {
-      if (!!cardsPlayed[p1]) {
-        log += `${shorten(p1)} played ${cardsPlayed[p1].join(', ')}\n`
-      }
-      if (!!cardsPlayed[p2]) {
-        log += `${shorten(p2)} played ${cardsPlayed[p2].join(', ')}\n`
-      }
-      cardsPlayed = {}
-      if (!!cardsUsed[p1]) {
-        log += `${shorten(p1)} used ${cardsUsed[p1].join(', ')}\n`
-      }
-      if (!!cardsUsed[p2]) {
-        log += `${shorten(p2)} used ${cardsUsed[p2].join(', ')}\n`
-      }
-      cardsUsed = {}
+      dumpCardMessages()
       log += `\n`
     }
     log += `Dynasty/Draw Phase (T${m[1]})\n\n`
@@ -117,20 +121,7 @@ for (var message of messages) {
   var conflictPhase = /^turn: (\d+) - conflict phase$/
   if (!!conflictPhase.test(s)) {
     var m = conflictPhase.exec(s)
-    if (!!cardsPlayed[p1]) {
-      log += `${shorten(p1)} played ${cardsPlayed[p1].join(', ')}\n`
-    }
-    if (!!cardsPlayed[p2]) {
-      log += `${shorten(p2)} played ${cardsPlayed[p2].join(', ')}\n`
-    }
-    cardsPlayed = {}
-    if (!!cardsUsed[p1]) {
-      log += `${shorten(p1)} used ${cardsUsed[p1].join(', ')}\n`
-    }
-    if (!!cardsUsed[p2]) {
-      log += `${shorten(p2)} used ${cardsUsed[p2].join(', ')}\n`
-    }
-    cardsUsed = {}
+    dumpCardMessages()
     log += `${passingFatePlayer} got the passing fate\n`
     log += `${shorten(p1)} drew ${cardsDrawnInDrawPhase[p1]}, ${shorten(
       p2
@@ -170,20 +161,7 @@ for (var message of messages) {
     justInitiatedConflict = true
     log += '\n'
     var m = initiateConflict.exec(s)
-    if (!!cardsPlayed[p1]) {
-      log += `${shorten(p1)} played ${cardsPlayed[p1].join(', ')}\n`
-    }
-    if (!!cardsPlayed[p2]) {
-      log += `${shorten(p2)} played ${cardsPlayed[p2].join(', ')}\n`
-    }
-    cardsPlayed = {}
-    if (!!cardsUsed[p1]) {
-      log += `${shorten(p1)} used ${cardsUsed[p1].join(', ')}\n`
-    }
-    if (!!cardsUsed[p2]) {
-      log += `${shorten(p2)} used ${cardsUsed[p2].join(', ')}\n`
-    }
-    cardsUsed = {}
+    dumpCardMessages()
     confAttacker = m[1]
     confType = m[2]
     confProvince = m[3]
@@ -222,41 +200,13 @@ for (var message of messages) {
   var wonConflict = /^(.*) won a (?:military|political) conflict (\d+) vs (\d+)/
   if (!!wonConflict.test(s)) {
     var m = wonConflict.exec(s)
-    if (!!cardsPlayed[p1]) {
-      log += `${shorten(p1)} played ${cardsPlayed[p1].join(', ')}\n`
-    }
-    if (!!cardsPlayed[p2]) {
-      log += `${shorten(p2)} played ${cardsPlayed[p2].join(', ')}\n`
-    }
-    cardsPlayed = {}
-    if (!!cardsUsed[p1]) {
-      log += `${shorten(p1)} used ${cardsUsed[p1].join(', ')}\n`
-    }
-    if (!!cardsUsed[p2]) {
-      log += `${shorten(p2)} used ${cardsUsed[p2].join(', ')}\n`
-    }
-    cardsUsed = {}
-
+    dumpCardMessages()
     log += `${shorten(m[1])} won the conflict ${m[2]} vs ${m[3]}\n`
   }
 
   var drawConflict = /There is no winner or loser for this conflict because both sides have 0 skill/
   if (!!drawConflict.test(s)) {
-    if (!!cardsPlayed[p1]) {
-      log += `${shorten(p1)} played ${cardsPlayed[p1].join(', ')}\n`
-    }
-    if (!!cardsPlayed[p2]) {
-      log += `${shorten(p2)} played ${cardsPlayed[p2].join(', ')}\n`
-    }
-    cardsPlayed = {}
-    if (!!cardsUsed[p1]) {
-      log += `${shorten(p1)} used ${cardsUsed[p1].join(', ')}\n`
-    }
-    if (!!cardsUsed[p2]) {
-      log += `${shorten(p2)} used ${cardsUsed[p2].join(', ')}\n`
-    }
-    cardsUsed = {}
-
+    dumpCardMessages()
     log += `The conflict was a draw (both sides have 0 skill)\n`
   }
 
@@ -296,62 +246,21 @@ for (var message of messages) {
   var claimFavorType = /^(.*) claims the Emperor's (.*) favor/
   if (!!claimFavorType.test(s)) {
     var m = claimFavorType.exec(s)
-    if (!!cardsPlayed[p1]) {
-      log += `${shorten(p1)} played ${cardsPlayed[p1].join(', ')}\n`
-    }
-    if (!!cardsPlayed[p2]) {
-      log += `${shorten(p2)} played ${cardsPlayed[p2].join(', ')}\n`
-    }
-    cardsPlayed = {}
-    if (!!cardsUsed[p1]) {
-      log += `${shorten(p1)} used ${cardsUsed[p1].join(', ')}\n`
-    }
-    if (!!cardsUsed[p2]) {
-      log += `${shorten(p2)} used ${cardsUsed[p2].join(', ')}\n`
-    }
-    cardsUsed = {}
-
+    dumpCardMessages()
     log += `${shorten(m[1])} claimed ${m[2]} favor: ${favorCount}\n`
   }
 
   var favorTie = /Both players are tied in glory/
   if (!!favorTie.test(s)) {
     var m = claimFavorType.exec(s)
-    if (!!cardsPlayed[p1]) {
-      log += `${shorten(p1)} played ${cardsPlayed[p1].join(', ')}\n`
-    }
-    if (!!cardsPlayed[p2]) {
-      log += `${shorten(p2)} played ${cardsPlayed[p2].join(', ')}\n`
-    }
-    cardsPlayed = {}
-    if (!!cardsUsed[p1]) {
-      log += `${shorten(p1)} used ${cardsUsed[p1].join(', ')}\n`
-    }
-    if (!!cardsUsed[p2]) {
-      log += `${shorten(p2)} used ${cardsUsed[p2].join(', ')}\n`
-    }
-    cardsUsed = {}
-
+    dumpCardMessages()
     log += `Glory is tied`
   }
 
   var resolveRing = /^(.*) resolves the (.*) ring/
   if (!!resolveRing.test(s)) {
     var m = resolveRing.exec(s)
-    if (!!cardsPlayed[p1]) {
-      log += `${shorten(p1)} played ${cardsPlayed[p1].join(', ')}\n`
-    }
-    if (!!cardsPlayed[p2]) {
-      log += `${shorten(p2)} played ${cardsPlayed[p2].join(', ')}\n`
-    }
-    cardsPlayed = {}
-    if (!!cardsUsed[p1]) {
-      log += `${shorten(p1)} used ${cardsUsed[p1].join(', ')}\n`
-    }
-    if (!!cardsUsed[p2]) {
-      log += `${shorten(p2)} used ${cardsUsed[p2].join(', ')}\n`
-    }
-    cardsUsed = {}
+    dumpCardMessages()
     log += `${shorten(m[1])} resolves the ${m[2]} ring\n`
   }
 
@@ -368,6 +277,7 @@ for (var message of messages) {
 
   var wonGame = /(.*) has won the game/
   if (!!wonGame.test(s)) {
+    dumpCardMessages()
     log += `\n${m[1]} has won the game${
       conceded ? ` (their opponent conceded)` : ``
     }\n\n`
