@@ -224,7 +224,7 @@ for (var message of messages) {
     log += `\n${shorten(m[1])} passed their conflict\n`
   }
 
-  var claimFavorCount = /^(.*) successfully claims the Emperor's favor with total glory of (.*)/
+  var claimFavorCount = /^(.*) wins the glory count (\d+ vs \d+)/
   if (!!claimFavorCount.test(s)) {
     var m = claimFavorCount.exec(s)
     favorCount = m[2]
