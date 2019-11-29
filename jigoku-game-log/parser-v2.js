@@ -113,7 +113,7 @@ for (var message of messages) {
     log += `${shorten(p1)} drew ${cardsDrawnInDrawPhase[p1]}, ${shorten(
       p2
     )} drew ${cardsDrawnInDrawPhase[p2]}\n`
-    log += `\nConflict Phase (T${m[1]})`
+    log += `\nConflict Phase (T${m[1]})\n`
   }
 
   var playCharacter = /^(.*) plays (.*) (into the conflict|at home)?\s?with (\d+) additional/
