@@ -116,13 +116,13 @@ for (var message of messages) {
     log += `\nConflict Phase (T${m[1]})\n`
   }
 
-  var playCharacter = /^(.*) plays (.*) (into the conflict|at home)?\s?with (\d+) additional/
+  var playCharacter = /^(.*) plays (.*?) (into the conflict|at home)?\s?with (\d+) additional/
   if (!!playCharacter.test(s)) {
     var m = playCharacter.exec(s)
     if (!cardsPlayed[m[1]]) {
       cardsPlayed[m[1]] = []
     }
-    cardsPlayed[m[1]].push(`${m[2]}+${m[4]}${!!m[3] ? `${m[3]}` : ``}`)
+    cardsPlayed[m[1]].push(`${m[2]}+${m[4]}${!!m[3] ? ` ${m[3]}` : ``}`)
   }
 
   var playNonCharacter = /^(.*) plays (.*?)(, .*?)? to/
