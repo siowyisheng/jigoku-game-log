@@ -1,43 +1,26 @@
-// maybe one button for copying to formatted markdown
-// one button for copying plaintext
-
-var copyToClipboard = str => {
-  var el = document.createElement('textarea')
-  el.value = str
-  el.setAttribute('readonly', '')
-  el.style.position = 'absolute'
-  el.style.left = '-9999px'
-  document.body.appendChild(el)
-  var selected =
-    document.getSelection().rangeCount > 0
-      ? document.getSelection().getRangeAt(0)
-      : false
-  el.select()
-  document.execCommand('copy')
-  document.body.removeChild(el)
-  if (selected) {
-    document.getSelection().removeAllRanges()
-    document.getSelection().addRange(selected)
-  }
-}
-
-// get all game messages in a HTMLCollection, concat them, then split them
-// because HTMLCollection is not easy to work with
-var cardsPlayed = {}
-var cardsUsed = {}
-var cardsDrawnInDrawPhase = {}
+// gets all game messages in a HTMLCollection
 var messages = document.getElementsByClassName('message')
+
 var log = ''
-var playersAreIntroduced = false
+// the actual log to be appended to (the output)
+var cardsPlayed = {}
+// to be populated with two keys of the player names, with values as a list of strings of cards played
+var cardsUsed = {}
+// same as cardsPlayed but for cards used (ie. procced)
+var cardsDrawnInDrawPhase = {}
+// to be populated with two keys of the player names, with integer values for the # of cards drawn in the last draw phase
+var justInitiatedConflict = false
+// used to silence confusing text from proccing Endless Plains
 var p1 = ''
 var p2 = ''
 var confAttacker, confType, confRing, confProvince, confSkill, confDefenderSkill
 var favorCount
-var justInitiatedConflict = false
 var conceded = false
 var shorten = s => s.substring(0, 2).toUpperCase()
 var capitalize = s => s.charAt(0).toUpperCase() + s.slice(1)
 
+// loop through once to identify player names and p1 and p2
+var playersAreIntroduced = false
 for (var message of messages) {
   var s = message.textContent
   var dynastyFlop = /^(.*) reveals (.*)/
@@ -56,6 +39,7 @@ for (var message of messages) {
   }
 }
 
+// adds cards played and cards used per player to the log and empties the objects
 var dumpCardMessages = () => {
   if (!!cardsPlayed[p1]) {
     log += `${shorten(p1)} played ${cardsPlayed[p1].join(', ')}\n`
@@ -73,6 +57,9 @@ var dumpCardMessages = () => {
   cardsUsed = {}
 }
 
+// this is the main loop parsing each message
+// we define all the different regex to be matched
+// if matched, then we do something (either set a variable for later or add something to the log)
 for (var message of messages) {
   var s = message.textContent
   var dynastyFlop = /^(.*) reveals (.*)/
@@ -286,4 +273,26 @@ for (var message of messages) {
 log += `~ Log created by Jigoku Game Log chrome extension`
 
 console.log(log)
+
+// from https://www.30secondsofcode.org/snippet/copyToClipboard
+var copyToClipboard = str => {
+  var el = document.createElement('textarea')
+  el.value = str
+  el.setAttribute('readonly', '')
+  el.style.position = 'absolute'
+  el.style.left = '-9999px'
+  document.body.appendChild(el)
+  var selected =
+    document.getSelection().rangeCount > 0
+      ? document.getSelection().getRangeAt(0)
+      : false
+  el.select()
+  document.execCommand('copy')
+  document.body.removeChild(el)
+  if (selected) {
+    document.getSelection().removeAllRanges()
+    document.getSelection().addRange(selected)
+  }
+}
+
 copyToClipboard(log)
