@@ -296,3 +296,31 @@ var copyToClipboard = str => {
 }
 
 copyToClipboard(log)
+
+// fetch data and save to local storage
+
+// e238ac42b64fffc6861cf1b4a9409c46
+// FAILED
+// $ curl -H "Accept: application/json" -X POST --data "text=text+goes+here"
+// fetch('https://pastebin.com/api/api_post.php', {
+//   method: 'post',
+//   body: {
+//     api_dev_key: 'e238ac42b64fffc6861cf1b4a9409c46',
+//     api_paste_code: 'POCsuccess',
+//     api_paste_private: '1',
+//     api_paste_name: `${p1}vs${p2}`,
+//     api_user_key: '',
+//   },
+// })
+//   .then(function(response) {
+//     return response.json()
+//   })
+//   .then(function(data) {
+//     console.log(data)
+//   })
+
+// TO TRY THIS
+// chrome.runtime.sendMessage(
+//   { contentScriptQuery: 'queryPrice', itemId: 12345 },
+//   price => {}
+// )
