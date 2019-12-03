@@ -34,7 +34,7 @@ for (var message of messages) {
     }
   }
   if (!playersAreIntroduced && !!p1 && !!p2) {
-    log += `${p1} (${shorten(p1)}) vs ${p2} (${shorten(p2)})\n\n`
+    log += `# ${p1} (${shorten(p1)}) vs ${p2} (${shorten(p2)})  \n\n`
     playersAreIntroduced = true
   }
 }
@@ -42,17 +42,17 @@ for (var message of messages) {
 // adds cards played and cards used per player to the log and empties the objects
 var dumpCardMessages = () => {
   if (!!cardsPlayed[p1]) {
-    log += `${shorten(p1)} played ${cardsPlayed[p1].join(', ')}\n`
+    log += `${shorten(p1)} played ${cardsPlayed[p1].join(', ')}  \n`
   }
   if (!!cardsPlayed[p2]) {
-    log += `${shorten(p2)} played ${cardsPlayed[p2].join(', ')}\n`
+    log += `${shorten(p2)} played ${cardsPlayed[p2].join(', ')}  \n`
   }
   cardsPlayed = {}
   if (!!cardsUsed[p1]) {
-    log += `${shorten(p1)} used ${cardsUsed[p1].join(', ')}\n`
+    log += `${shorten(p1)} used ${cardsUsed[p1].join(', ')}  \n`
   }
   if (!!cardsUsed[p2]) {
-    log += `${shorten(p2)} used ${cardsUsed[p2].join(', ')}\n`
+    log += `${shorten(p2)} used ${cardsUsed[p2].join(', ')}  \n`
   }
   cardsUsed = {}
 }
@@ -72,7 +72,7 @@ for (var message of messages) {
     if (p1 === '') {
       p1 = m[1]
     }
-    log += `${shorten(m[1])} revealed ${m[2]}\n`
+    log += `${shorten(m[1])} revealed ${m[2]}  \n`
   }
 
   var dynastyPhase = /^turn: (\d+) - dynasty phase$/
@@ -80,9 +80,9 @@ for (var message of messages) {
     var m = dynastyPhase.exec(s)
     if (m[1] > 1) {
       dumpCardMessages()
-      log += `\n`
+      log += `  \n`
     }
-    log += `Dynasty/Draw Phase (T${m[1]})\n\n`
+    log += `## Dynasty/Draw Phase (T${m[1]})  \n\n`
   }
 
   var dynastyDuplicate = /^(.*) discards a duplicate to add 1  to (.*)/
@@ -109,11 +109,11 @@ for (var message of messages) {
   if (!!conflictPhase.test(s)) {
     var m = conflictPhase.exec(s)
     dumpCardMessages()
-    log += `${passingFatePlayer} got the passing fate\n`
+    log += `${passingFatePlayer} got the passing fate  \n`
     log += `${shorten(p1)} drew ${cardsDrawnInDrawPhase[p1]}, ${shorten(
       p2
-    )} drew ${cardsDrawnInDrawPhase[p2]}\n`
-    log += `\nConflict Phase (T${m[1]})\n`
+    )} drew ${cardsDrawnInDrawPhase[p2]}  \n`
+    log += `  \n## Conflict Phase (T${m[1]})  \n`
   }
 
   var playCharacter = /^(.*) plays (.*?) (into the conflict|at home)?\s?with (\d+) additional/
@@ -146,7 +146,7 @@ for (var message of messages) {
   var initiateConflict = /^(.*) is initiating a (.*) conflict at (.*), contesting the (.*) ring/
   if (!!initiateConflict.test(s)) {
     justInitiatedConflict = true
-    log += '\n'
+    log += '  \n'
     var m = initiateConflict.exec(s)
     dumpCardMessages()
     confAttacker = m[1]
@@ -166,35 +166,35 @@ for (var message of messages) {
     var m = conflictDefenderSkill.exec(s)
     justInitiatedConflict = false
     confDefenderSkill = m[2]
-    log += `\n${shorten(confAttacker)} initiated ${capitalize(
+    log += `  \n**${shorten(confAttacker)} initiated ${capitalize(
       confType
     )} ${capitalize(
       confRing
-    )} confict at ${confProvince} (${confSkill} vs ${confDefenderSkill})\n`
+    )} confict at ${confProvince} (${confSkill} vs ${confDefenderSkill})**  \n`
   }
 
   var conflictNoDefense = /^(.*) does not defend the conflict/
   if (!!conflictNoDefense.test(s)) {
     var m = conflictNoDefense.exec(s)
     justInitiatedConflict = false
-    log += `${shorten(confAttacker)} initiated ${capitalize(
+    log += `**${shorten(confAttacker)} initiated ${capitalize(
       confType
     )} ${capitalize(
       confRing
-    )} confict at ${confProvince} (${confSkill} vs undefended)\n`
+    )} confict at ${confProvince} (${confSkill} vs undefended)**  \n`
   }
 
   var wonConflict = /^(.*) won a (?:military|political) conflict (\d+) vs (\d+)/
   if (!!wonConflict.test(s)) {
     var m = wonConflict.exec(s)
     dumpCardMessages()
-    log += `${shorten(m[1])} won the conflict ${m[2]} vs ${m[3]}\n`
+    log += `**${shorten(m[1])} won the conflict ${m[2]} vs ${m[3]}**  \n`
   }
 
   var drawConflict = /There is no winner or loser for this conflict because both sides have 0 skill/
   if (!!drawConflict.test(s)) {
     dumpCardMessages()
-    log += `The conflict was a draw (both sides have 0 skill)\n`
+    log += `The conflict was a draw (both sides have 0 skill)  \n`
   }
 
   var brokeProvince = /^(.*) has broken (.*)!/
@@ -202,26 +202,26 @@ for (var message of messages) {
     var m = brokeProvince.exec(s)
     if (justInitiatedConflict && m[2] === 'Endless Plains') {
     } else {
-      log += `${shorten(m[1])} broke ${m[2]}\n`
+      log += `**${shorten(m[1])} broke ${m[2]}**  \n`
     }
   }
 
   var discard = /^(.*) chooses to discard (.*)/
   if (!!discard.test(s)) {
     var m = discard.exec(s)
-    log += `${shorten(m[1])} discarded ${m[2]}\n`
+    log += `${shorten(m[1])} discarded ${m[2]}  \n`
   }
 
   var takeFateFromRing = /^(.*) takes (\d+) fate from the (.*) ring/
   if (!!takeFateFromRing.test(s)) {
     var m = takeFateFromRing.exec(s)
-    log += `${shorten(m[1])} took ${m[2]} fate from the ${m[3]} ring\n`
+    log += `${shorten(m[1])} took ${m[2]} fate from the ${m[3]} ring  \n`
   }
 
   var passConflictOpp = /^(.*) passes their conflict opportunity/
   if (!!passConflictOpp.test(s)) {
     var m = passConflictOpp.exec(s)
-    log += `\n${shorten(m[1])} passed their conflict\n`
+    log += `  \n${shorten(m[1])} passed their conflict  \n`
   }
 
   var claimFavorCount = /^(.*) wins the glory count (\d+ vs \d+)/
@@ -234,7 +234,7 @@ for (var message of messages) {
   if (!!claimFavorType.test(s)) {
     var m = claimFavorType.exec(s)
     dumpCardMessages()
-    log += `${shorten(m[1])} claimed ${m[2]} favor: ${favorCount}\n`
+    log += `${shorten(m[1])} claimed ${m[2]} favor: ${favorCount}  \n`
   }
 
   var favorTie = /Both players are tied in glory/
@@ -248,13 +248,13 @@ for (var message of messages) {
   if (!!resolveRing.test(s)) {
     var m = resolveRing.exec(s)
     dumpCardMessages()
-    log += `${shorten(m[1])} resolves the ${m[2]} ring\n`
+    log += `${shorten(m[1])} resolves the ${m[2]} ring  \n`
   }
 
   var fatePhase = /^turn: (\d+) -  phase/
   if (!!fatePhase.test(s)) {
     var m = fatePhase.exec(s)
-    log += `\nFate/Regroup Phase (T${m[1]})\n`
+    log += `  \n## Fate/Regroup Phase (T${m[1]})  \n`
   }
 
   var concede = /(.*) concedes/
@@ -265,12 +265,12 @@ for (var message of messages) {
   var wonGame = /(.*) has won the game/
   if (!!wonGame.test(s)) {
     dumpCardMessages()
-    log += `\n${m[1]} has won the game${
+    log += `  \n${m[1]} has won the game${
       conceded ? ` (their opponent conceded)` : ``
-    }\n\n`
+    }  \n\n`
   }
 }
-log += `~ Log created by Jigoku Game Log chrome extension`
+log += `\n\n_~ Log created by [Jigoku Game Log chrome extension](https://chrome.google.com/webstore/detail/jigoku-game-log/cofpncfeggiibpickflljahgmhabgkeg)_`
 
 console.log(log)
 
@@ -295,32 +295,13 @@ var copyToClipboard = str => {
   }
 }
 
-copyToClipboard(log)
-
-// fetch data and save to local storage
-
-// e238ac42b64fffc6861cf1b4a9409c46
-// FAILED
-// $ curl -H "Accept: application/json" -X POST --data "text=text+goes+here"
-// fetch('https://pastebin.com/api/api_post.php', {
-//   method: 'post',
-//   body: {
-//     api_dev_key: 'e238ac42b64fffc6861cf1b4a9409c46',
-//     api_paste_code: 'POCsuccess',
-//     api_paste_private: '1',
-//     api_paste_name: `${p1}vs${p2}`,
-//     api_user_key: '',
-//   },
-// })
-//   .then(function(response) {
-//     return response.json()
-//   })
-//   .then(function(data) {
-//     console.log(data)
-//   })
-
-// TO TRY THIS
-// chrome.runtime.sendMessage(
-//   { contentScriptQuery: 'queryPrice', itemId: 12345 },
-//   price => {}
-// )
+var encoded = encodeURIComponent(log)
+chrome.runtime.sendMessage(
+  {
+    text: encoded,
+  },
+  function(text) {
+    console.log(text)
+    copyToClipboard(text)
+  }
+)

@@ -13,18 +13,17 @@ chrome.runtime.onInstalled.addListener(function() {
   })
 })
 
-// TO TRY THIS
-// chrome.runtime.onMessage.addListener(
-//   function(request, sender, sendResponse) {
-//     if (request.contentScriptQuery == 'queryPrice') {
-//       var url = 'https://another-site.com/price-query?itemId=' +
-//           encodeURIComponent(request.itemId);
-//       fetch(url)
-//           .then(response => response.text())
-//           .then(text => parsePrice(text))
-//           .then(price => sendResponse(price))
-//           .catch(error => ...)
-//       return true;  // Will respond asynchronously.
-//     }
-//   }
-// );
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  fetch('https://markdownshare.com/create/', {
+    method: 'post',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `text=${request.text}`
+  })
+    .then(response => response.json())
+    .then(json => sendResponse(json.link))
+    .catch(error => console.error('Error:', error))
+  return true
+})

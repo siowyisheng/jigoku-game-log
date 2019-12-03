@@ -1,9 +1,9 @@
 {
   "name": "Jigoku Game Log",
   "short_name": "Jigoku Game Log",
-  "version": "0.1",
+  "version": "0.2",
   "description": "Summarises a jigoku game for sharing and review and copies it to your clipboard.",
-  "permissions": ["activeTab", "declarativeContent"],
+  "permissions": ["activeTab", "declarativeContent", "https://markdownshare.com/create/"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false
@@ -17,5 +17,6 @@
   "icons": {
     "16": "icon16.png"
   },
+  "content_security_policy": "default-src 'self' https://markdownshare.com/*; style-src 'unsafe-inline'; connect-src https://markdownshare.com/create/",
   "manifest_version": 2
 }
