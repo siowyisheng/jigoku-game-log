@@ -16,8 +16,8 @@ var p2 = ''
 var confAttacker, confType, confRing, confProvince, confSkill, confDefenderSkill
 var favorCount
 var conceded = false
-var shorten = s => s.substring(0, 2).toUpperCase()
-var capitalize = s => s.charAt(0).toUpperCase() + s.slice(1)
+var shorten = (s) => s.substring(0, 2).toUpperCase()
+var capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1)
 
 // loop through once to identify player names and p1 and p2
 var playersAreIntroduced = false
@@ -275,7 +275,7 @@ log += `\n\n_~ Log created by [Jigoku Game Log chrome extension](https://chrome.
 console.log(log)
 
 // from https://www.30secondsofcode.org/snippet/copyToClipboard
-var copyToClipboard = str => {
+var copyToClipboard = (str) => {
   var el = document.createElement('textarea')
   el.value = str
   el.setAttribute('readonly', '')
@@ -295,13 +295,4 @@ var copyToClipboard = str => {
   }
 }
 
-var encoded = encodeURIComponent(log)
-chrome.runtime.sendMessage(
-  {
-    text: encoded,
-  },
-  function(text) {
-    console.log(text)
-    copyToClipboard(text)
-  }
-)
+copyToClipboard(log)

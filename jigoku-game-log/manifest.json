@@ -1,9 +1,15 @@
 {
+"update_url": "https://clients2.google.com/service/update2/crx",
+
   "name": "Jigoku Game Log",
   "short_name": "Jigoku Game Log",
-  "version": "0.2",
+  "version": "0.21",
   "description": "Summarises a jigoku game for sharing and review and copies it to your clipboard.",
-  "permissions": ["activeTab", "declarativeContent", "https://markdownshare.com/create/"],
+  "permissions": [
+    "activeTab",
+    "declarativeContent",
+    "https://markdownshare.com/create/"
+  ],
   "background": {
     "scripts": ["background.js"],
     "persistent": false
